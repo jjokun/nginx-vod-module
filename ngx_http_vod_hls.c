@@ -574,6 +574,7 @@ ngx_http_vod_hls_handle_mp4_init_segment(
 			SCHEME_TYPE_CBCS,
 			FALSE,
 			NULL,
+			NULL,
 			encryption_params.iv,
 			&stsd_atom_writers);
 		if (rc != VOD_OK)
@@ -593,6 +594,7 @@ ngx_http_vod_hls_handle_mp4_init_segment(
 			SCHEME_TYPE_CENC,
 			FALSE,
 			drm_info->key_id,
+			NULL,
 			NULL,
 			&stsd_atom_writers);
 		if (rc != VOD_OK)

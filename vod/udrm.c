@@ -7,6 +7,8 @@ enum {
 	DRM_INFO_PARAM_IV,
 	DRM_INFO_PARAM_KEY,
 	DRM_INFO_PARAM_KEY_ID,
+    DRM_INFO_PARAM_AUDIO_KEY,
+    DRM_INFO_PARAM_AUDIO_KEY_ID,
 	DRM_INFO_PARAM_PSSH,
 
 	DRM_INFO_PARAM_COUNT
@@ -21,10 +23,12 @@ enum {
 
 // constants
 static json_object_key_def_t drm_info_keys_def[] = {
-	{ vod_string("iv"),		VOD_JSON_STRING,	DRM_INFO_PARAM_IV },
-	{ vod_string("key"),	VOD_JSON_STRING,	DRM_INFO_PARAM_KEY },
-	{ vod_string("key_id"),	VOD_JSON_STRING,	DRM_INFO_PARAM_KEY_ID },
-	{ vod_string("pssh"),	VOD_JSON_ARRAY,		DRM_INFO_PARAM_PSSH },
+	{ vod_string("iv"),		        VOD_JSON_STRING,	DRM_INFO_PARAM_IV },
+	{ vod_string("key"),	        VOD_JSON_STRING,	DRM_INFO_PARAM_KEY },
+    { vod_string("key_id"),	        VOD_JSON_STRING,	DRM_INFO_PARAM_KEY_ID },
+    { vod_string("audio_key"),	    VOD_JSON_STRING,	DRM_INFO_PARAM_AUDIO_KEY },
+    { vod_string("audio_key_id"),	VOD_JSON_STRING,	DRM_INFO_PARAM_AUDIO_KEY_ID },
+	{ vod_string("pssh"),	        VOD_JSON_ARRAY,		DRM_INFO_PARAM_PSSH },
 	{ vod_null_string, 0, 0}
 };
 
@@ -96,6 +100,25 @@ udrm_parse_response(
 			"udrm_parse_response: vod_alloc failed (1)");
 		return VOD_ALLOC_FAILED;
 	}
+
+	if (drm_info_values[DRM_INFO_PARAM_AUDIO_KEY] != NULL && drm_info_values[DRM_INFO_PARAM_AUDIO_KEY_ID] != NULL)
+    {
+        rc = parse_utils_parse_fixed_base64_string(&drm_info_values[DRM_INFO_PARAM_AUDIO_KEY]->v.str, result->audio_key, sizeof(result->audio_key));
+        if (rc != VOD_JSON_OK)
+        {
+            vod_log_error(VOD_LOG_ERR, request_context->log, 0,
+                          "udrm_parse_response: parse_utils_parse_fixed_base64_string(audio_key) failed %i", rc);
+            return VOD_BAD_DATA;
+        }
+
+        rc = parse_utils_parse_fixed_base64_string(&drm_info_values[DRM_INFO_PARAM_AUDIO_KEY_ID]->v.str, result->audio_key_id, sizeof(result->audio_key_id));
+        if (rc != VOD_JSON_OK)
+        {
+            vod_log_error(VOD_LOG_ERR, request_context->log, 0,
+                          "udrm_parse_response: parse_utils_parse_fixed_base64_string(audio_key_id) failed %i", rc);
+            return VOD_BAD_DATA;
+        }
+    }
 
 	rc = parse_utils_parse_fixed_base64_string(&drm_info_values[DRM_INFO_PARAM_KEY]->v.str, result->key, sizeof(result->key));
 	if (rc != VOD_JSON_OK)

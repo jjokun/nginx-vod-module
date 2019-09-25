@@ -51,6 +51,7 @@
 
 // mpd types
 typedef struct {
+    request_context_t* request_context;
 	u_char* temp_buffer;
 	bool_t write_playready_kid;
 } write_content_protection_context_t;
@@ -136,7 +137,15 @@ edash_packager_write_content_protection(void* ctx, u_char* p, media_track_t* tra
 			p = vod_copy(p, VOD_EDASH_MANIFEST_CONTENT_PROTECTION_CENC_PART1, sizeof(VOD_EDASH_MANIFEST_CONTENT_PROTECTION_CENC_PART1) - 1);
 			p = mp4_cenc_encrypt_write_guid(p, cur_info->system_id);
 			p = vod_copy(p, VOD_EDASH_MANIFEST_CONTENT_PROTECTION_CENC_PART2, sizeof(VOD_EDASH_MANIFEST_CONTENT_PROTECTION_CENC_PART2) - 1);
-			p = mp4_cenc_encrypt_write_guid(p, drm_info->key_id);
+
+			if (track->media_info.media_type == MEDIA_TYPE_AUDIO)
+            {
+                p = mp4_cenc_encrypt_write_guid(p, drm_info->audio_key_id);
+            }
+			else
+			{
+                p = mp4_cenc_encrypt_write_guid(p, drm_info->key_id);
+            }
 			p = vod_copy(p, VOD_EDASH_MANIFEST_CONTENT_PROTECTION_CENC_PART3, sizeof(VOD_EDASH_MANIFEST_CONTENT_PROTECTION_CENC_PART3) - 1);
 
 			pssh.data = context->temp_buffer;
@@ -218,6 +227,7 @@ edash_packager_build_mpd(
 		representation_tags_size += cur_drm_tags_size * cur_sequence->total_track_count;
 	}
 
+	context.request_context = request_context;
 	context.write_playready_kid = conf->write_playready_kid;
 	if (max_pssh_size > 0)
 	{
@@ -301,6 +311,7 @@ edash_packager_build_init_mp4(
 		SCHEME_TYPE_CENC,
 		(flags & EDASH_INIT_MP4_HAS_CLEAR_LEAD) != 0,
 		drm_info->key_id,
+		drm_info->audio_key_id,
 		NULL,
 		&stsd_atom_writers);
 	if (rc != VOD_OK)

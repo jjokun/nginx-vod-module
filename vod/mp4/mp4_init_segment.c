@@ -1009,6 +1009,7 @@ mp4_init_segment_get_encrypted_stsd_writers(
 	uint32_t scheme_type,
 	bool_t has_clear_lead,
 	u_char* default_kid,
+	u_char* audio_kid,
 	u_char* iv,
 	atom_writer_t** result)
 {
@@ -1040,6 +1041,10 @@ mp4_init_segment_get_encrypted_stsd_writers(
 		stsd_writer_context->scheme_type = scheme_type;
 		stsd_writer_context->has_clear_lead = has_clear_lead;
 		stsd_writer_context->default_kid = default_kid;
+		if (first_track[i].media_info.media_type == MEDIA_TYPE_AUDIO && audio_kid != NULL)
+		{
+		    stsd_writer_context->default_kid = audio_kid;
+		}
 		stsd_writer_context->iv = iv;
 
 		rc = mp4_init_segment_init_encrypted_stsd_writer(

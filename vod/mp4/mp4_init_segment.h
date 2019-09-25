@@ -32,6 +32,7 @@ vod_status_t mp4_init_segment_get_encrypted_stsd_writers(
 	uint32_t scheme_type,
 	bool_t has_clear_lead,
 	u_char* default_kid,
+	u_char* audio_kid,
 	u_char* iv,
 	atom_writer_t** result);
 

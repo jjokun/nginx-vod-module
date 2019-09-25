@@ -14,6 +14,7 @@
 	"<MPD\n"																	\
 	"    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"				\
 	"    xmlns=\"urn:mpeg:dash:schema:mpd:2011\"\n"								\
+	"    xmlns:cenc=\"urn:mpeg:cenc:2013\"\n"                                   \
 	"    xsi:schemaLocation=\"urn:mpeg:dash:schema:mpd:2011 http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-DASH_schema_files/DASH-MPD.xsd\"\n"	\
 	"    type=\"static\"\n"														\
 	"    mediaPresentationDuration=\"PT%uD.%03uDS\"\n"							\

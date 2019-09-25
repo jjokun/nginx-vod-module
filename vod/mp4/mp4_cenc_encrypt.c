@@ -63,6 +63,7 @@ mp4_cenc_encrypt_init_state(
 	vod_status_t rc;
 	uint64_t iv_int;
 	u_char* p;
+	u_char *key = drm_info->key;
 
 	// fixed fields
 	state->request_context = request_context;
@@ -71,8 +72,13 @@ mp4_cenc_encrypt_init_state(
 	state->segment_index = segment_index;
 	state->segment_writer = *segment_writer;
 
+	if(sequence->media_type == MEDIA_TYPE_AUDIO)
+    {
+	    key = drm_info->audio_key;
+    }
+
 	// init the aes ctr
-	rc = mp4_aes_ctr_init(&state->cipher, request_context, drm_info->key);
+	rc = mp4_aes_ctr_init(&state->cipher, request_context, key);
 	if (rc != VOD_OK)
 	{
 		return rc;
