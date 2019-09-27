@@ -311,7 +311,7 @@ edash_packager_build_init_mp4(
 		SCHEME_TYPE_CENC,
 		(flags & EDASH_INIT_MP4_HAS_CLEAR_LEAD) != 0,
 		drm_info->key_id,
-		drm_info->audio_key_id,
+		drm_info->audio_key_set ? drm_info->audio_key_id : NULL,
 		NULL,
 		&stsd_atom_writers);
 	if (rc != VOD_OK)
