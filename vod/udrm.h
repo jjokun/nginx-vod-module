@@ -26,6 +26,7 @@ typedef struct {
     u_char audio_key[DRM_KEY_SIZE];
 	u_char iv[DRM_IV_SIZE];
 	bool_t iv_set;
+	bool_t audio_key_set;
 	drm_system_info_array_t pssh_array;
 } drm_info_t;
 

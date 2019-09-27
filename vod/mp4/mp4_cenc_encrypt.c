@@ -72,7 +72,7 @@ mp4_cenc_encrypt_init_state(
 	state->segment_index = segment_index;
 	state->segment_writer = *segment_writer;
 
-	if(sequence->media_type == MEDIA_TYPE_AUDIO)
+	if(sequence->media_type == MEDIA_TYPE_AUDIO && drm_info->audio_key_set)
     {
 	    key = drm_info->audio_key;
     }

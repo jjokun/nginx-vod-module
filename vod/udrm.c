@@ -28,7 +28,7 @@ static json_object_key_def_t drm_info_keys_def[] = {
     { vod_string("key_id"),	        VOD_JSON_STRING,	DRM_INFO_PARAM_KEY_ID },
     { vod_string("audio_key"),	    VOD_JSON_STRING,	DRM_INFO_PARAM_AUDIO_KEY },
     { vod_string("audio_key_id"),	VOD_JSON_STRING,	DRM_INFO_PARAM_AUDIO_KEY_ID },
-	{ vod_string("pssh"),	        VOD_JSON_ARRAY,		DRM_INFO_PARAM_PSSH },
+	{ vod_string("pssh"),	        VOD_JSON_ARRAY,	DRM_INFO_PARAM_PSSH },
 	{ vod_null_string, 0, 0}
 };
 
@@ -118,7 +118,12 @@ udrm_parse_response(
                           "udrm_parse_response: parse_utils_parse_fixed_base64_string(audio_key_id) failed %i", rc);
             return VOD_BAD_DATA;
         }
+        result->audio_key_set = TRUE;
     }
+	else
+    {
+        result->audio_key_set = FALSE;
+	}
 
 	rc = parse_utils_parse_fixed_base64_string(&drm_info_values[DRM_INFO_PARAM_KEY]->v.str, result->key, sizeof(result->key));
 	if (rc != VOD_JSON_OK)

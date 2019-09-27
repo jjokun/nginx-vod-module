@@ -138,7 +138,7 @@ edash_packager_write_content_protection(void* ctx, u_char* p, media_track_t* tra
 			p = mp4_cenc_encrypt_write_guid(p, cur_info->system_id);
 			p = vod_copy(p, VOD_EDASH_MANIFEST_CONTENT_PROTECTION_CENC_PART2, sizeof(VOD_EDASH_MANIFEST_CONTENT_PROTECTION_CENC_PART2) - 1);
 
-			if (track->media_info.media_type == MEDIA_TYPE_AUDIO)
+			if (track->media_info.media_type == MEDIA_TYPE_AUDIO && drm_info->audio_key_set)
             {
                 p = mp4_cenc_encrypt_write_guid(p, drm_info->audio_key_id);
             }
